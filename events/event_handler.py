@@ -36,7 +36,6 @@ class EventHandler:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     pass
-        print(pygame.mouse.get_pressed())
 
     def handle_input(self):
         pressed = pygame.key.get_pressed()
