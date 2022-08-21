@@ -1,22 +1,18 @@
 from typing import List
 
-from pygame import time
+import pygame.display
 from pygame.image import load
 from pygame.math import Vector2
-from pygame.sprite import Sprite
 from pygame.transform import scale
 
-from functions import cooldown
-from game_objects.bullets import Bullet, RayGun
+from effects.spark import Spark
+from game_objects.bullets import Bullet, RayGun, Ray
+from game_objects.components.ship_components import ShipBase
 
 
-class Player(Sprite):
+class Player(ShipBase):
     def __init__(self):
-        super().__init__()
-        self.image = load("white-yellow.png")
-        self.image = scale(self.image, (50, 50))
-        # self.image.fill((255, 255, 255))
-        self.rect = self.image.get_rect()
+        super().__init__(path="white-yellow.png")
         self.rect.x = 250
         self.rect.y = 250
 
@@ -24,15 +20,19 @@ class Player(Sprite):
         self.max_velocity = Vector2(3, 3)
         self.velocity = Vector2(0, 0)
         self.acceleration = Vector2(0, 0)
-        self.ray = 50
         self._health = 10
+        self._angle = -90
+        self._screen_size = pygame.display.get_surface().get_size()
 
-        tick = time.get_ticks()
-        self.ticks = {
-            "primary_fire": {"tick": tick, "delay": 200},
-            "secondary_fire": {"tick": tick, "delay": 10},
-            "damage_taken": {"tick": tick, "delay": 200},
-        }
+    def _player_out_of_bounds(self):
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > self._screen_size[0]:
+            self.rect.right = self._screen_size[0]
+        if self.rect.top < 0:
+            self.rect.top = 0
+        if self.rect.bottom > self._screen_size[1]:
+            self.rect.bottom = self._screen_size[1]
 
     @property
     def health(self) -> int:
@@ -40,15 +40,12 @@ class Player(Sprite):
 
     @health.setter
     def health(self, value) -> None:
-        if self._cooldown("damage_taken"):
+        if self.is_ready("damage_taken"):
             self._health = value
-
-    def _cooldown(self, tick_name: str) -> bool:
-        return cooldown(self.ticks[tick_name])
 
     @property
     def velocity(self) -> Vector2:
-        return self.__velocity
+        return self._velocity
 
     @velocity.setter
     def velocity(self, value) -> None:
@@ -58,10 +55,11 @@ class Player(Sprite):
             value.x = self.max_velocity.x if value.x > 0 else -self.max_velocity.x
         if y > self.max_velocity.y:
             value.y = self.max_velocity.y if value.y > 0 else -self.max_velocity.y
-        self.__velocity = value
+        self._velocity = value
 
     def update(self):
-        self.ray -= 1 if self.ray > 0 else 0
+        self._player_out_of_bounds()
+
         self.velocity += self.acceleration
         if self.acceleration.x == 0:
             self.velocity.x *= 0.4
@@ -70,13 +68,6 @@ class Player(Sprite):
         self.rect.center += self.velocity
 
     def primary_fire(self) -> List[Bullet]:
-        if self._cooldown("primary_fire"):
-            self.ray += 5
-            return [Bullet(self.rect.center)]
-        return []
-
-    def secondary_fire(self) -> List[RayGun]:
-        if self._cooldown("secondary_fire"):
-            self.ray += 25 if self.ray < 500 else 0
-            return [RayGun(self.rect.center, self.ray)]
+        if self.is_ready("primary_fire"):
+            return [Bullet(self.rect.center, self._angle)]
         return []

@@ -1,26 +1,33 @@
-from pygame import Color
-from pygame.image import load
+from typing import List
+
 from pygame.math import Vector2
-from pygame.sprite import Sprite
-from pygame.transform import scale, flip
+
+from game_objects.bullets import Bullet
+from game_objects.components.ship_components import ShipBase, ABCBullet, ABCRayGun
 
 
-class Enemy(Sprite):
-    def __init__(self):
-        super().__init__()
-        self.image = load("enemy.gif")
-        self.image = scale(self.image, (50, 50))
-        self.image = flip(self.image, True, False)
-        self.rect = self.image.get_rect()
-        self.rect.x = 100
-        self.rect.y = 100
-        self.health = 10
+class Enemy(ShipBase):
+    def __init__(self, bullets_group=None, pos=None):
+        super().__init__(angle=180)
+        self.bullets_group = bullets_group
+        self.speed = Vector2(0, 1)
+        self._angle = 90
+        self._cooldown["primary_fire"]["delay"] = 1200
 
-        # stats
-        self.velocity = Vector2(1, 0)
-        self.life = 10
+        if pos is not None:
+            print(f"{pos=}, {bullets_group=}")
+            self.rect.center = pos
 
-    def update(self):
-        self.rect.center += self.velocity
-        if self.health <= 0:
-            self.kill()
+    def primary_fire(self) -> List[ABCBullet]:
+        if self.bullets_group:
+            bullets = [Bullet(self.rect.center, self._angle)]
+            self.bullets_group.add(bullets)
+            return bullets
+        return []
+
+    def secondary_fire(self) -> List[ABCRayGun]:
+        raise NotImplementedError
+
+    def update(self, *args, **kwargs) -> None:
+        super().update(*args, **kwargs)
+        self.ship_update()

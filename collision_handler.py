@@ -2,8 +2,6 @@ from typing import Dict
 
 from pygame.sprite import Group, spritecollide, collide_mask, spritecollideany, groupcollide
 
-from game_objects.bullets import Bullet
-
 
 class CollisionHandler:
     def __init__(self, groups: Dict[str, Group]):
@@ -28,6 +26,9 @@ class CollisionHandler:
         collided = spritecollideany(player, bullet_group)
         if collided:
             mask_collision = collide_mask(player, collided)
+            if mask_collision:
+                collided.kill()
+                player.health -= collided.damage
 
     def handle_enemies_bullets(self):
         enemies_group = self._groups["enemies"]
@@ -35,9 +36,5 @@ class CollisionHandler:
         collisions = groupcollide(enemies_group, bullets_group, False, False)
         for enemy, bullets in collisions.items():
             for bullet in bullets:
-                if collide_mask(enemy, bullet):
+                if collide_mask(enemy, bullet) and hasattr(bullet, "damage"):
                     enemy.health -= bullet.damage
-                    bullet.kill()
-                else:
-                    enemy.health -= bullet.damage
-                    bullet.kill()

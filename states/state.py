@@ -1,3 +1,4 @@
+import inspect
 from abc import ABC, abstractmethod
 from typing import Dict
 
@@ -21,9 +22,10 @@ class State(ABC):
         self.font = font.SysFont("Sans", 36, bold=True)
 
     @staticmethod
-    def close() -> None:
+    def close() -> Event:
         event = Event(STATE_POP)
-        return event, post(event)
+        post(event)
+        return event
 
     def draw_text(self, screen, text, pos, color):
         text = self.font.render(text, True, color)
@@ -47,3 +49,10 @@ class State(ABC):
         for group_name, group in self.groups.items():
             group.update(*args, **kwargs)
 
+
+def get_state_class(state: str) -> State:
+    import states as _states
+    for state_name, state_class in inspect.getmembers(_states, inspect.isclass):
+        if state_name.lower() == state.lower():
+            return state_class
+    raise ValueError(f"State {state} not found")
