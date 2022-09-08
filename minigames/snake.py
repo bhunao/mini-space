@@ -2,9 +2,9 @@ import pygame
 from pygame.locals import *
 from pygame.sprite import Group
 
-from configs import *
-from functions import draw_score, draw_text
-from buttons import Cables
+from src.configs import *
+from src.functions import draw_score, draw_text
+from src.buttons import Cables
 
 
 def snake(screen_, mouse_):

@@ -8,14 +8,16 @@ from pygame.locals import *
 import pygame
 from pygame.surface import Surface
 
-from buttons import Button
-from configs import *
-from effects import TakeDamage
-from functions import draw_text, quit_game, player_hud
-from game_objects import Camera, Player, Enemy, Boss, Board, Cables
+from src.buttons import Button
+from src.configs import *
+from src.effects import TakeDamage
+from src.functions import draw_text, quit_game, player_hud
+from src.game_objects import Camera, Player, Enemy, Boss, Board, Cables
 
 pygame.init()
-screen = pygame.display.set_mode(SCREEN_SIZE, pygame.SRCALPHA)
+screen = pygame.display.set_mode((0, 0), pygame.SRCALPHA)
+size = screen.get_rect()
+WIDTH, HEIGHT = size.width, size.height
 pygame.display.set_caption(NAME)
 clock = pygame.time.Clock()
 
