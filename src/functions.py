@@ -38,7 +38,7 @@ def load_numbers(path, size):
 
 
 def draw_text(screen, text, pos, size=30, color=(255, 255, 255), bold=False):
-    font = pygame.font.Font("fonts/Kenney Pixel.ttf", size)
+    font = pygame.font.Font("assets/fonts/Kenney Pixel.ttf", size)
     font.set_bold(True)
     text = font.render(text, True, color)
     text_rect = text.get_rect()

@@ -20,9 +20,9 @@ class Player(Sprite):
     def __init__(self, pos):
         super().__init__()
         self._screen_size = get_screen_size()
-        self.shoot_sound = mixer.Sound("sounds/shoot.ogg")
+        self.shoot_sound = mixer.Sound("assets/sounds/shoot.ogg")
         self.shoot_sound.set_volume(0.3)
-        self.image = load("Ships/ship_0003.png")
+        self.image = load("assets/imgs/ships/ship_0003.png")
         self.image = scale(self.image, (75, 75))
         self.rect = self.image.get_rect()
         self.rect.center = pos
@@ -99,7 +99,7 @@ class Bullet(Sprite):
 class Boss(Sprite):
     def __init__(self):
         super().__init__()
-        self.image = load("Ships/ship_0014.png")
+        self.image = load("assets/imgs/ships/ship_0014.png")
         self.image = scale(self.image, (475, 275))
         self.image = flip(self.image, False, True)
         self.image.set_colorkey(Color(0, 0, 0))
@@ -150,7 +150,7 @@ class Gun(Sprite):
 class Enemy(Sprite):
     def __init__(self, pos=Vector2(0, 0), life=1):
         super().__init__()
-        self.image = load("Ships/ship_0014.png")
+        self.image = load("assets/imgs/ships/ship_0014.png")
         self.image = scale(self.image, (75, 75))
         self.image = flip(self.image, False, True)
         self.rect = self.image.get_rect()
@@ -193,9 +193,9 @@ class Camera(Group):
         self.bg = Background()
         self.effects = Group()
         self.items = Group()
-        self.sound_explosion = mixer.Sound("sounds/explosion_01.ogg")
+        self.sound_explosion = mixer.Sound("assets/sounds/explosion_01.ogg")
         self.sound_explosion.set_volume(0.1)
-        self.sound_impact = mixer.Sound("sounds/impact.ogg")
+        self.sound_impact = mixer.Sound("assets/sounds/impact.ogg")
         self.sound_impact.set_volume(0.1)
 
     def respawn_enemie(self):
@@ -311,12 +311,12 @@ class Background(Group):
         self.image = Surface(get_screen_size())
         self.image.fill((0, 0, 0))
         self.rect = self.image.get_rect()
-        starts = [BgStar() for _ in range(100)]
+        starts = [BgStar() for _ in range(1)]
         self.add(starts)
 
     def update(self):
         super().update()
-        n = randint(0, 5)
+        n = randint(0, 1)
         stars = [BgStar() for _ in range(n)]
         self.add(stars)
 
@@ -349,7 +349,7 @@ class Cables(Sprite):
         self.rect.center = pos if pos else self.rect.center
         # self.draw_cable()
         self.cables = self.create_cables(6)
-        self.connect_sound = mixer.Sound("sounds/cable_connect.ogg")
+        self.connect_sound = mixer.Sound("assets/sounds/cable_connect.ogg")
         self.connect_sound.set_volume(0.3)
 
     def draw(self, screen):

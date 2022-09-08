@@ -43,10 +43,10 @@ def type_the_code() -> bool:
     buttons = Group()
     effects = Group()
     confimation = (
-        mixer.Sound("sounds/confirmation_001.ogg"),
-        mixer.Sound("sounds/confirmation_002.ogg"),
-        mixer.Sound("sounds/confirmation_003.ogg"),
-        mixer.Sound("sounds/confirmation_004.ogg"),
+        mixer.Sound("assets/sounds/confirmation_001.ogg"),
+        mixer.Sound("assets/sounds/confirmation_002.ogg"),
+        mixer.Sound("assets/sounds/confirmation_003.ogg"),
+        mixer.Sound("assets/sounds/confirmation_004.ogg"),
     )
 
     # board
