@@ -29,10 +29,10 @@ player = Player((WIDTH / 2, HEIGHT / 8 * 7))
 camera.add(player)
 enemy = Enemy((WIDTH / 2, 0))
 camera.enemies.add(enemy)
-# boss = Boss()
-# camera.enemies.add(boss)
-# boss.add_gun()
-# boss.add_gun(True)
+boss = Boss()
+camera.enemies.add(boss)
+boss.add_gun()
+boss.add_gun(True)
 
 
 def instructions():
@@ -133,17 +133,18 @@ def space():
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     running_ = False
-                if event.key == K_UP:
+                if event.key == K_w:
                     player.speed.y = -3
-                if event.key == K_DOWN:
+                if event.key == K_s:
                     player.speed.y = 3
-                if event.key == K_LEFT:
+                if event.key == K_a:
                     player.speed.x = -3
-                if event.key == K_RIGHT:
+                if event.key == K_d:
                     player.speed.x = 3
                 if event.key == K_SPACE:
                     bullet = player.shoot()
                     camera.bullets.add(bullet)
+
 
         if pygame.mouse.get_pressed()[0]:
             bullet = player.shoot()
