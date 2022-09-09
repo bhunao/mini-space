@@ -29,10 +29,10 @@ player = Player((WIDTH / 2, HEIGHT / 8 * 7))
 camera.add(player)
 enemy = Enemy((WIDTH / 2, 0))
 camera.enemies.add(enemy)
-boss = Boss()
-camera.enemies.add(boss)
-boss.add_gun()
-boss.add_gun(True)
+# boss = Boss()
+# camera.enemies.add(boss)
+# boss.add_gun()
+# boss.add_gun(True)
 
 
 def instructions():
